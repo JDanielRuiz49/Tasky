@@ -3,6 +3,7 @@ package com.tasks.task.service.exceptions;
 import com.tasks.task.model.dto.Error;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -14,23 +15,23 @@ public class GlobalExceptionHandler {
     public ResponseEntity<Error> handlerDocumentAlreadyExist(UserAlreadyExists userAlreadyExists){
         Error errorResponse = new Error();
         errorResponse.setMessage(userAlreadyExists.getMessage());
-        errorResponse.setCode(HttpStatus.NOT_FOUND);
-        return new ResponseEntity<>(errorResponse, HttpStatus.CONFLICT);
+        errorResponse.setCode(HttpStatus.CONFLICT);
+        return new ResponseEntity<>(errorResponse, errorResponse.getCode());
     }
 
     @ExceptionHandler(RequestFormatInvalid.class)
     public ResponseEntity<Error> handlerRequestFormatInvalid(RequestFormatInvalid requestFormatInvalid){
         Error errorResponse = new Error();
         errorResponse.setMessage(requestFormatInvalid.getMessage());
-        errorResponse.setCode(HttpStatus.NOT_FOUND);
-        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+        errorResponse.setCode(HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(errorResponse, errorResponse.getCode());
     }
     @ExceptionHandler(UserNotFound.class)
     public ResponseEntity<Error> handlerUserNotFound(UserNotFound userNotFound){
         Error errorResponse = new Error();
         errorResponse.setMessage(userNotFound.getMessage());
         errorResponse.setCode(HttpStatus.NOT_FOUND);
-        return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(errorResponse, errorResponse.getCode());
     }
 
     @ExceptionHandler(TaskNotFoundException.class)
@@ -38,7 +39,7 @@ public class GlobalExceptionHandler {
         Error errorResponse = new Error();
         errorResponse.setMessage(ex.getMessage());
         errorResponse.setCode(HttpStatus.NOT_FOUND);
-        return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(errorResponse, errorResponse.getCode());
     }
 
     // Maneja errores de validación como campos vacíos (En el caso de titulo y descripción de task)
@@ -47,7 +48,7 @@ public class GlobalExceptionHandler {
         Error errorResponse = new Error();
         errorResponse.setMessage(ex.getMessage());
         errorResponse.setCode(HttpStatus.BAD_REQUEST);
-        return new ResponseEntity<>(errorResponse,HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(errorResponse,errorResponse.getCode());
     }
 
 

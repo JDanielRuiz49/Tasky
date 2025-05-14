@@ -66,10 +66,14 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public List<Task> getTaskStatus(Status status) {
-        if (status==null) {
-            throw new com.tasks.task.service.exceptions.IllegalArgumentException("The status is null");
+        List<Task> tasks;
+
+        if (status == null) {
+            tasks = taskRepository.findAll();
+        } else {
+            tasks = taskRepository.findByStatus(status);
         }
-        List<Task> tasks = taskRepository.findByStatus(status);
+
         if (tasks.isEmpty()) {
             throw new TaskNotFoundException("Task with status " + status.name()+ " not found");
         }
@@ -78,6 +82,10 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public Task getTaskUuid(UUID uuid) {
+        if (uuid == null) {
+            throw new IllegalArgumentException("UUID cannot be null");
+        }
+
         String uuidRegex = "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-5][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$";
         if (!uuid.toString().matches(uuidRegex)) {
             throw new IllegalArgumentException("The UUID is not valid");

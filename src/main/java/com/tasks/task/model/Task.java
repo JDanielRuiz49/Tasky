@@ -1,6 +1,7 @@
 package com.tasks.task.model;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;
@@ -11,16 +12,25 @@ import java.util.UUID;
 public class Task {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
+    @Schema(description = "Unique identifier of the task", example = "3fa85f64-5717-4562-b3fc-2c963f66afa6")
     private UUID uuid;
+
+    @Schema(description = "Title of the task", example = "first task")
     private String title;
+
+    @Schema(description = "Description of the task", example = "description of the task")
     private String description;
+
+    @Schema(description = "Current status of the task", example = "OPEN")
     private Status status;
 
-    //cascadeType para guardar, eliminar, actualizar de una entidad a sus entidades relacionadas(ALL, PERSIST, REMOVE, MERGE)
-    //fetch = FetchType para la carga de datos de la relación desde la BD(EAGER, LAZY)
-    @OneToMany(mappedBy = "task", cascade = CascadeType.ALL, fetch = FetchType.EAGER)// verificar el atributo entidad
+    @OneToMany(mappedBy = "task", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JsonManagedReference
     private List<CheckList> checklist = new ArrayList<>();
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "userId", referencedColumnName = "user_id")
+    private User user;
 
     public Task() {
     }
@@ -70,5 +80,13 @@ public class Task {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 }
