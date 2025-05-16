@@ -1,7 +1,6 @@
 package com.tasks.task.config;
 
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.stereotype.Component;
@@ -26,14 +25,4 @@ public class JwtUtil {
         return SECRET_KEY;
     }
 
-    public String extractUsername(String token) {
-        return extractAllClaims(token).getSubject();
-    }
-
-    private Claims extractAllClaims(String token) {
-        return Jwts.parser()
-                .setSigningKey(SECRET_KEY.getBytes())
-                .parseClaimsJws(token)
-                .getBody();
-    }
 }
