@@ -25,11 +25,11 @@ public class Task {
     private Status status;
 
     @OneToMany(mappedBy = "task", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JsonManagedReference
+    @JsonManagedReference// Lado "padre" o propietario, se serializa
     private List<CheckList> checklist = new ArrayList<>();
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "userId", referencedColumnName = "user_id")
+    @ManyToOne(fetch = FetchType.EAGER)//cargar la relación de inmediato, junto con la entidad principal
+    @JsonManagedReference
     private User user;
 
     public Task() {

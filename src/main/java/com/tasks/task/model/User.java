@@ -2,6 +2,8 @@ package com.tasks.task.model;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 
@@ -18,9 +20,11 @@ public class User {
     private String username;
 
     @Schema(description = "Password for authentication", example = "P@ssw0rd", accessMode = Schema.AccessMode.WRITE_ONLY)
+    @JsonIgnore
     private String password;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true) // si se elimina una task pero no el usuario JPA eliminará la tarea de la BD
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)//cargar la relación solo cuando la necesites (cuando la accedes por código).
+    @JsonBackReference// Lado "hijo", no se serializa
     @Schema(hidden = true)
     private List<Task> tasks = new ArrayList<>();
 
