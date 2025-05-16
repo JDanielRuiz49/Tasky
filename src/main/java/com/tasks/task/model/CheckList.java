@@ -2,6 +2,7 @@ package com.tasks.task.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 
 import java.util.UUID;
@@ -9,13 +10,19 @@ import java.util.UUID;
 public class CheckList {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
+    @Schema(description = "Unique identifier of the checklist item", example = "7b4e9c9f-b7f6-4b42-bc5f-8b4eaa877723")
     private UUID id;
+
+    @Schema(description = "Description of the checklist item", example = "Description of the checklist item")
     private String description;
+
+    @Schema(description = "Status of the checklist item", example = "false")
     private boolean status;
 
     @ManyToOne
     @JoinColumn(name = "taskId", referencedColumnName = "uuid")//Verificar el referencedColumnName
     @JsonBackReference
+    @Schema(hidden = true)
 //    @JsonIgnore
     private Task task;
 

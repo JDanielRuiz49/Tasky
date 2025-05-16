@@ -24,4 +24,5 @@ public class JwtUtil {
     public String getSECRET_KEY() {
         return SECRET_KEY;
     }
+
 }

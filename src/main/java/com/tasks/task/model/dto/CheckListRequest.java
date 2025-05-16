@@ -1,7 +1,13 @@
 package com.tasks.task.model.dto;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+
 public class CheckListRequest{
+
+    @Schema(description = "Description Checklist", example = "first checklist item")
     private String description;
+
+    @Schema(description = "Status of the Checklist", example = "Checklist item status")
     private boolean status;
 
     public String getDescription() {
