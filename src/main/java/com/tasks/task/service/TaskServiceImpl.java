@@ -3,6 +3,7 @@ package com.tasks.task.service;
 import com.tasks.task.config.JwtUtil;
 import com.tasks.task.model.Status;
 import com.tasks.task.model.Task;
+import com.tasks.task.model.User;
 import com.tasks.task.model.dto.StatusRequest;
 import com.tasks.task.model.dto.TaskRequest;
 import com.tasks.task.repository.AuthRepository;
@@ -87,11 +88,18 @@ public class TaskServiceImpl implements TaskService {
     @Override
     public List<Task> getTaskStatus(Status status) {
         List<Task> tasks;
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null || !authentication.isAuthenticated()) {
+            throw new RuntimeException("No authenticated user found");
+        }
+
+        String username = authentication.getName();
+        var user = authRepository.findByUsername(username);
 
         if (status == null) {
-            tasks = taskRepository.findAll();
+            tasks = taskRepository.findByUser(user);
         } else {
-            tasks = taskRepository.findByStatus(status);
+            tasks = taskRepository.findByStatusAndUser(status, user);
         }
 
         if (tasks.isEmpty()) {
